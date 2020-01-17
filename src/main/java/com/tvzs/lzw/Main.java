@@ -4,7 +4,7 @@ public class Main {
 
     public static void main(String[] args) {
         LZWEncryptor encryptor = new LZWEncryptor();
-        encryptor.encryptWithAlphabet("ababcababa", "a", "b", "c");
+        encryptor.encryptWithoutAlphabet("ababcababa");
     }
 
 }

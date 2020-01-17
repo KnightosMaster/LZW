@@ -1,5 +1,7 @@
 package com.tvzs.lzw;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.*;
 
 public class LZWEncryptor {
@@ -43,7 +45,7 @@ public class LZWEncryptor {
             }
         }
         output.add(getCodeOfString(current));
-        System.out.println("Output is: " + output);
+        printTheOutput();
     }
 
     private void cleanUp() {
@@ -86,4 +88,24 @@ public class LZWEncryptor {
                 "Code table is: " + codeTable + "\n");
         current = charBuffer;
     }
+
+    private void printTheOutput() {
+        System.out.println("Code table is: " + codeTable);
+        System.out.println("Raw output is: " + output);
+        //Due to floating point fuckery this may not always be correct
+        int bitsNeeded = (int) Math.ceil(Math.log(output.size()) / Math.log(2));
+        String code = getCodeFromOutput(bitsNeeded);
+        System.out.println("Bits needed: " + bitsNeeded + "\n" +
+                "Encoded string: " + code);
+    }
+
+    private String getCodeFromOutput(int bitsNeeded) {
+        StringBuilder code = new StringBuilder();
+        for (String s: output) {
+            String binaryNoLeadingZero = Integer.toBinaryString(Integer.parseInt(s));
+            code.append(StringUtils.leftPad(binaryNoLeadingZero, bitsNeeded, '0'));
+        }
+        return code.toString();
+    }
+
 }
