@@ -1,0 +1,18 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.tvzs'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '12'
+
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
+
+repositories {
+    mavenCentral()
+}
