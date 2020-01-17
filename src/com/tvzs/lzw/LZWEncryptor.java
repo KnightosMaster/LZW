@@ -15,10 +15,24 @@ public class LZWEncryptor {
         output = new LinkedList<>();
     }
 
-    public String encrypt(String data, String... alphabet) {
+    //This initializes the alphabet from the string
+    public void encryptWithoutAlphabet(String data) {
+        String[] alphabet = Arrays.stream(data.split(""))
+                .sorted()
+                .distinct()
+                .toArray(String[]::new);
+        encryptWithAlphabet(data, alphabet);
+    }
+
+    public void encryptWithAlphabet(String data, String... alphabet) {
         if (data.isEmpty() || alphabet.length == 0) {
-            return "Why would you do that?";
+            System.out.println("Why would you do that?");
+            return;
         }
+        encrypt(data, alphabet);
+    }
+
+    private void encrypt(String data, String[] alphabet) {
         cleanUp();
         initializeFields(data, alphabet);
         while (!charStream.isEmpty()) {
@@ -30,7 +44,6 @@ public class LZWEncryptor {
         }
         output.add(getCodeOfString(current));
         System.out.println("Output is: " + output);
-        return "";
     }
 
     private void cleanUp() {
