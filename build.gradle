@@ -4,7 +4,7 @@ plugins {
 
 group = 'com.tvzs'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '12'
+sourceCompatibility = '11'
 
 configurations {
     developmentOnly
@@ -15,4 +15,12 @@ configurations {
 
 repositories {
     mavenCentral()
+}
+
+dependencies {
+    implementation 'org.apache.commons:commons-lang3:3.9'
+}
+
+compileJava {
+    options.encoding = 'UTF-8'
 }
