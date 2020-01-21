@@ -1,8 +1,9 @@
 package com.tvzs.lzw;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
-import static com.tvzs.lzw.Common.getBitLength;
+import static com.tvzs.lzw.Common.getBitLengthFromSize;
 import static com.tvzs.lzw.Common.getCodeFromOutput;
 
 public class LZWEncoder extends Encoder {
@@ -30,7 +31,7 @@ public class LZWEncoder extends Encoder {
     }
 
     @Override
-    protected void initializeFields(String input, String[] alphabet) {
+    protected void initializeFields(String input) {
         Collections.addAll(codeTable, alphabet);
         System.out.println("Code table initialized as: " + codeTable);
         charStream = new LinkedList<>(Arrays.asList(input.split("")));
@@ -60,8 +61,11 @@ public class LZWEncoder extends Encoder {
         System.out.println("Code table is: " + codeTable);
         System.out.println("Raw output is: " + outputList);
         //Due to floating point fuckery this may not always be correct
-        encodedBitLength = getBitLength(outputList);
-        encodedString = getCodeFromOutput(outputList, encodedBitLength);
+        encodedBitLength = getBitLengthFromSize(outputList.size());
+        List<Integer> outputIntegerList = outputList.stream()
+                .map(Integer::parseInt)
+                .collect(Collectors.toList());
+        encodedString = getCodeFromOutput(outputIntegerList, encodedBitLength);
         System.out.println("Bits needed: " + encodedBitLength + "\n" +
                 "Encoded string: " + encodedString + "\n");
     }

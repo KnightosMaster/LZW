@@ -6,14 +6,14 @@ import java.util.List;
 
 public class Common {
 
-    public static int getBitLength(List<String> strings) {
-        return (int) Math.ceil(Math.log(strings.size()) / Math.log(2));
+    public static int getBitLengthFromSize(int size) {
+        return (int) Math.ceil(Math.log(size) / Math.log(2));
     }
 
-    public static String getCodeFromOutput(List<String> output, int bitsNeeded) {
+    public static String getCodeFromOutput(List<Integer> output, int bitsNeeded) {
         StringBuilder code = new StringBuilder();
-        for (String s : output) {
-            String binaryNoLeadingZero = Integer.toBinaryString(Integer.parseInt(s));
+        for (Integer s : output) {
+            String binaryNoLeadingZero = Integer.toBinaryString(s);
             code.append(StringUtils.leftPad(binaryNoLeadingZero, bitsNeeded, '0'));
         }
         return code.toString();

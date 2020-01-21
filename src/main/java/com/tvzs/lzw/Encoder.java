@@ -23,7 +23,7 @@ public abstract class Encoder {
 
     //This initializes the alphabet from the string
     public void encryptWithoutAlphabet(String input) {
-        alphabet = Arrays.stream(input.split(""))
+        String[] alphabet = Arrays.stream(input.split(""))
                 .sorted()
                 .distinct()
                 .toArray(String[]::new);
@@ -35,19 +35,20 @@ public abstract class Encoder {
             System.out.println("Why would you do that?");
             return;
         }
-        encrypt(input, alphabet);
+        this.alphabet = alphabet;
+        encrypt(input);
     }
 
-    private void encrypt(String input, String[] alphabet) {
+    private void encrypt(String input) {
         cleanUp();
-        initializeFields(input, alphabet);
+        initializeFields(input);
         doTheEncryption();
         printTheOutput();
     }
 
     protected abstract void cleanUp();
 
-    protected abstract void initializeFields(String input, String[] alphabet);
+    protected abstract void initializeFields(String input);
 
     protected abstract void doTheEncryption();
 

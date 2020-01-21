@@ -18,20 +18,19 @@ public class LZWDecoder {
 
     public void decode(String input, String[] alphabet) {
         cleanUp();
-        this.input = input;
-        initialize(alphabet);
-        System.out.println("Decoder cleaned up and initialized\n");
+        initialize(input, alphabet);
         actualDecoding();
-        System.out.println("Final code table: " + codeTable.toString() + "\n" +
-                "Final output: " + output.toString() + "\n");
+        printTheOutput();
     }
 
     private void cleanUp() {
+
         codeTable.clear();
         output.clear();
     }
 
-    private void initialize(String[] alphabet) {
+    private void initialize(String input, String[] alphabet) {
+        this.input = input;
         Collections.addAll(codeTable, alphabet);
         getBitLengthAndCodes();
     }
@@ -86,4 +85,9 @@ public class LZWDecoder {
         }
     }
 
+
+    private void printTheOutput() {
+        System.out.println("Final code table: " + codeTable.toString() + "\n" +
+                "Final output: " + output.toString() + "\n");
+    }
 }
