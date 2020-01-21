@@ -96,7 +96,7 @@ public class LZWEncryptor {
         int bitsNeeded = (int) Math.ceil(Math.log(output.size()) / Math.log(2));
         String code = getCodeFromOutput(bitsNeeded);
         System.out.println("Bits needed: " + bitsNeeded + "\n" +
-                "Encoded string: " + code);
+                "Encoded string: " + code + "\n");
     }
 
     private String getCodeFromOutput(int bitsNeeded) {
