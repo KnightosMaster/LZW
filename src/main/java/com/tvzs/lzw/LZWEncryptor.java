@@ -65,10 +65,6 @@ public class LZWEncryptor {
                 "Now come de LØØP\n");
     }
 
-    private String getCodeOfString(String s) {
-        return String.valueOf(codeTable.indexOf(s));
-    }
-
     private void readNextCharacterAndUpdateTheOthers() {
         charBuffer = charStream.pop();
         previous = current;
@@ -87,6 +83,10 @@ public class LZWEncryptor {
                 "curr is now " + charBuffer + "\n" +
                 "Code table is: " + codeTable + "\n");
         current = charBuffer;
+    }
+
+    private String getCodeOfString(String s) {
+        return String.valueOf(codeTable.indexOf(s));
     }
 
     private void printTheOutput() {
