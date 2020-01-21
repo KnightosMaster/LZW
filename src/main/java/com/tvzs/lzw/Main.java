@@ -17,11 +17,20 @@ public class Main {
         long lzwMidTime = System.nanoTime();
         LZW_DECODER.decode(LZW_ENCODER.getDecodableString(), LZW_ENCODER.getAlphabet());
         long lzwEndTime = System.nanoTime();
-
-        System.out.println("==LZW==\n" +
+        System.out.println("LZW finished, now comes the Naive\n");
+        long naiveStartTime = System.nanoTime();
+        NAIVE_ENCODER.encryptWithoutAlphabet(input);
+        long naiveMidTime = System.nanoTime();
+        long naiveEndTime = System.nanoTime();
+        System.out.println("Run complete, now for the stats:\n" +
+                "==LZW==\n" +
                 "Encryption took " + (lzwMidTime - lzwStartTime)/1e6 + " milliseconds\n" +
                 "Decoding took " + (lzwEndTime - lzwMidTime)/1e6 + " milliseconds\n" +
-                "Compressed/original ratio is " + LZW_ENCODER.getEfficiency() + "%\n");
+                "Compressed/original ratio is " + LZW_ENCODER.getEfficiency() + "%\n" +
+                "==NAIVE==\n" +
+                "Encryption took " + (naiveMidTime - naiveStartTime)/1e6 + " milliseconds\n" +
+                "Decoding took " + (naiveEndTime - naiveMidTime)/1e6 + " milliseconds\n" +
+                "Compressed/original ratio is " + NAIVE_ENCODER.getEfficiency() + "%\n");
     }
 
 }

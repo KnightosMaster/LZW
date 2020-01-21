@@ -50,6 +50,7 @@ public class NaiveEncoder extends Encoder {
     @Override
     protected void printTheOutput() {
         System.out.println("Naive compression complete\n" +
+                "Code table is" + characterCodeMap.toString() + "\n" +
                 "Bits needed per character: " + encodedBitLength + "\n" +
                 "Encoded string: " + encodedString + "\n");
     }
