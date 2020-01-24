@@ -5,88 +5,111 @@ import com.google.common.base.Splitter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class LZWDecoder {
+public class LZWDecoder extends Decoder {
     private List<String> codeTable;
     private List<String> output;
-    private LinkedList<Integer> codes;
-    private String input;
+    private LinkedList<Integer> inStream;
+    private Integer charBuffer;
+    private String current;
+    private String next;
 
     public LZWDecoder() {
         codeTable = new ArrayList<>();
         output = new LinkedList<>();
     }
 
-    public void decode(String input, String[] alphabet) {
-        cleanUp();
-        initialize(input, alphabet);
-        actualDecoding();
-        printTheOutput();
-    }
-
-    private void cleanUp() {
-
+    @Override
+    protected void cleanUp() {
         codeTable.clear();
         output.clear();
     }
 
-    private void initialize(String input, String[] alphabet) {
-        this.input = input;
+    @Override
+    protected void initialize(String input, String[] alphabet) {
         Collections.addAll(codeTable, alphabet);
-        getBitLengthAndCodes();
+        getBitLengthAndCodes(input);
     }
 
-    private void getBitLengthAndCodes() {
+    private void getBitLengthAndCodes(String input) {
         String[] lengthAndData = input.split(" ");
         int length = Integer.parseInt(lengthAndData[0]);
         Splitter splitter = Splitter.fixedLength(length);
         List<String> bitcodeList = splitter.splitToList(lengthAndData[1]);
-        codes = bitcodeList.stream()
+        inStream = bitcodeList.stream()
                 .map(this::getIndexFromBitcode)
                 .collect(Collectors.toCollection(LinkedList::new));
         System.out.println("Length is " + length + "\n" +
                 "List of bitcodes: " + bitcodeList.toString() + "\n" +
-                "List of codes: " + codes.toString() + "\n");
+                "List of codes: " + inStream.toString() + "\n");
     }
 
     private int getIndexFromBitcode(String code) {
         return Integer.parseInt(code, 2);
     }
 
-    private void actualDecoding() {
-        Integer charBuffer = codes.pop();
-        String current = codeTable.get(charBuffer);
-        output.add(current);
-        System.out.println("First code is " + charBuffer + " which corresponds to " + current);
-        charBuffer = codes.pop();
-        System.out.println("Second code is " + charBuffer);
+    @Override
+    protected void decodeTheInput() {
+        decodeFirstCharacter();
+        readSecondCharacterToBuffer();
         boolean shouldRun = true;
         while (shouldRun) {
-            String next;
-            if (charBuffer < codeTable.size()) {
-                next = codeTable.get(charBuffer);
-                System.out.print("charBuffer is in codeTable, next is ");
-            } else {
-                next = current + current.charAt(0);
-                System.out.print("charBuffer is NOT in codeTable, next is ");
-            }
-            System.out.println(next);
-            output.add(next);
-            String stringDebt = current + next.charAt(0);
-            codeTable.add(stringDebt);
-            current = next;
-            System.out.println(stringDebt + " added to code table\n" +
-                    "current is now: " + current + "\n");
-            if (codes.isEmpty()) {
+            getNextAndAddItToOutput();
+            addDebtToCodeTableAndProceed();
+            if (inStream.isEmpty()) {
                 shouldRun = false;
             } else {
-                charBuffer = codes.pop();
-                System.out.println("Reading next character, charBuffer is: " + charBuffer);
+                readNextCharacter();
             }
         }
     }
 
+    private void decodeFirstCharacter() {
+        charBuffer = inStream.pop();
+        current = codeTable.get(charBuffer);
+        output.add(current);
+        System.out.println("First code is " + charBuffer + " which corresponds to " + current);
+    }
 
-    private void printTheOutput() {
+    private void readSecondCharacterToBuffer() {
+        charBuffer = inStream.pop();
+        System.out.println("Second code is " + charBuffer);
+    }
+
+    private void getNextAndAddItToOutput() {
+        if (isCharBufferInCodeTable()) {
+            next = codeTable.get(charBuffer);
+            System.out.print("charBuffer is in codeTable, next is ");
+        } else {
+            next = current + getFirstCharOf(current);
+            System.out.print("charBuffer is NOT in codeTable, next is ");
+        }
+        System.out.println(next);
+        output.add(next);
+    }
+
+    private void addDebtToCodeTableAndProceed() {
+        String stringDebt = current + getFirstCharOf(next);
+        codeTable.add(stringDebt);
+        current = next;
+        System.out.println(stringDebt + " added to code table\n" +
+                "current is now: " + current + "\n");
+    }
+
+    private boolean isCharBufferInCodeTable() {
+        return charBuffer < codeTable.size();
+    }
+
+    private char getFirstCharOf(String string) {
+        return string.charAt(0);
+    }
+
+    private void readNextCharacter() {
+        charBuffer = inStream.pop();
+        System.out.println("Reading next character, charBuffer is: " + charBuffer);
+    }
+
+    @Override
+    protected void printTheOutput() {
         System.out.println("Final code table: " + codeTable.toString() + "\n" +
                 "Final output: " + output.toString() + "\n");
     }
