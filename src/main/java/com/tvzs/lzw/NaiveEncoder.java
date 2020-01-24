@@ -35,7 +35,6 @@ public class NaiveEncoder extends Encoder {
         inputLength = input.length();
         encodedBitLength = Common.getBitLengthFromSize(alphabet.length);
         characters = Arrays.asList(input.split(""));
-
     }
 
     @Override
@@ -50,7 +49,7 @@ public class NaiveEncoder extends Encoder {
     @Override
     protected void printTheOutput() {
         System.out.println("Naive compression complete\n" +
-                "Code table is" + characterCodeMap.toString() + "\n" +
+                "Code table is " + characterCodeMap.toString() + "\n" +
                 "Bits needed per character: " + encodedBitLength + "\n" +
                 "Encoded string: " + encodedString + "\n");
     }

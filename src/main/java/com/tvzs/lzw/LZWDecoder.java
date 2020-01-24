@@ -30,23 +30,6 @@ public class LZWDecoder extends Decoder {
         getBitLengthAndCodes(input);
     }
 
-    private void getBitLengthAndCodes(String input) {
-        String[] lengthAndData = input.split(" ");
-        int length = Integer.parseInt(lengthAndData[0]);
-        Splitter splitter = Splitter.fixedLength(length);
-        List<String> bitcodeList = splitter.splitToList(lengthAndData[1]);
-        inStream = bitcodeList.stream()
-                .map(this::getIndexFromBitcode)
-                .collect(Collectors.toCollection(LinkedList::new));
-        System.out.println("Length is " + length + "\n" +
-                "List of bitcodes: " + bitcodeList.toString() + "\n" +
-                "List of codes: " + inStream.toString() + "\n");
-    }
-
-    private int getIndexFromBitcode(String code) {
-        return Integer.parseInt(code, 2);
-    }
-
     @Override
     protected void decodeTheInput() {
         decodeFirstCharacter();
@@ -61,6 +44,25 @@ public class LZWDecoder extends Decoder {
                 readNextCharacter();
             }
         }
+    }
+
+    @Override
+    protected void printTheOutput() {
+        System.out.println("Final code table: " + codeTable.toString() + "\n" +
+                "Final output: " + output.toString() + "\n");
+    }
+
+    private void getBitLengthAndCodes(String input) {
+        String[] lengthAndData = input.split(" ");
+        int length = Integer.parseInt(lengthAndData[0]);
+        Splitter splitter = Splitter.fixedLength(length);
+        List<String> bitcodeList = splitter.splitToList(lengthAndData[1]);
+        inStream = bitcodeList.stream()
+                .map(Common::getIndexFromBitcode)
+                .collect(Collectors.toCollection(LinkedList::new));
+        System.out.println("Length is " + length + "\n" +
+                "List of bitcodes: " + bitcodeList.toString() + "\n" +
+                "List of codes: " + inStream.toString() + "\n");
     }
 
     private void decodeFirstCharacter() {
@@ -106,11 +108,5 @@ public class LZWDecoder extends Decoder {
     private void readNextCharacter() {
         charBuffer = inStream.pop();
         System.out.println("Reading next character, charBuffer is: " + charBuffer);
-    }
-
-    @Override
-    protected void printTheOutput() {
-        System.out.println("Final code table: " + codeTable.toString() + "\n" +
-                "Final output: " + output.toString() + "\n");
     }
 }

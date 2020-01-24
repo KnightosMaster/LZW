@@ -19,4 +19,7 @@ public class Common {
         return code.toString();
     }
 
+    public static int getIndexFromBitcode(String code) {
+        return Integer.parseInt(code, 2);
+    }
 }
