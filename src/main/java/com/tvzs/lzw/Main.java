@@ -5,6 +5,7 @@ public class Main {
     private static final LZWEncoder LZW_ENCODER = new LZWEncoder();
     private static final LZWDecoder LZW_DECODER = new LZWDecoder();
     private static final NaiveEncoder NAIVE_ENCODER = new NaiveEncoder();
+    private static final NaiveDecoder NAIVE_DECODER = new NaiveDecoder();
 
     public static void main(String[] args) {
         encryptAndDecrypt("ababcababa");
@@ -21,6 +22,7 @@ public class Main {
         long naiveStartTime = System.nanoTime();
         NAIVE_ENCODER.encryptWithoutAlphabet(input);
         long naiveMidTime = System.nanoTime();
+        NAIVE_DECODER.decode(NAIVE_ENCODER.getDecodableString(), NAIVE_ENCODER.getAlphabet());
         long naiveEndTime = System.nanoTime();
         System.out.println("Run complete, now for the stats:\n" +
                 "==LZW==\n" +
